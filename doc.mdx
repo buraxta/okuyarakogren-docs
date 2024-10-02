@@ -1,1 +1,217 @@
-#here we go
+# MDX Dosya Formatı ve Sözdizimi Rehberi
+
+MDX, Markdown ve JSX'in güçlerini birleştiren bir dosya formatıdır. Bu format, içerik yazarlarının Markdown'ın basitliğini kullanırken aynı zamanda JSX bileşenlerini de eklemelerine olanak tanır.
+
+## 1. Temel Markdown Sözdizimi
+
+MDX, standart Markdown sözdizimini destekler:
+
+### 1.1. Başlıklar
+
+```
+# Birinci Seviye Başlık
+## İkinci Seviye Başlık
+### Üçüncü Seviye Başlık
+```
+
+### 1.2. Metin Biçimlendirme
+
+```
+*İtalik* veya _İtalik_
+**Kalın** veya __Kalın__
+***Kalın ve İtalik*** veya ___Kalın ve İtalik___
+```
+
+### 1.3. Listeler
+
+Sırasız liste:
+```
+- Öğe 1
+- Öğe 2
+  - Alt öğe 2.1
+  - Alt öğe 2.2
+```
+
+Sıralı liste:
+```
+1. Birinci öğe
+2. İkinci öğe
+   1. Alt öğe 2.1
+   2. Alt öğe 2.2
+```
+
+### 1.4. Bağlantılar ve Görseller
+
+```
+[Bağlantı Metni](https://www.ornek.com)
+![Alternatif Metin](gorsel.jpg "Görsel Başlığı")
+```
+
+### 1.5. Alıntılar
+
+```
+> Bu bir alıntıdır.
+> Birden fazla satır olabilir.
+```
+
+### 1.6. Kod Blokları
+
+Satır içi kod:
+```
+`const ornekKod = "Merhaba Dünya!";`
+```
+
+Çoklu satır kod bloğu:
+````
+```javascript
+function selamla(isim) {
+  console.log(`Merhaba, ${isim}!`);
+}
+```
+````
+
+## 2. JSX Entegrasyonu
+
+MDX'in en güçlü özelliği, Markdown içinde JSX kullanabilme yeteneğidir.
+
+### 2.1. Bileşen İçe Aktarma
+
+MDX dosyanızın başında bileşenleri içe aktarabilirsiniz:
+
+```jsx
+import { Button } from './components/Button'
+```
+
+### 2.2. Bileşen Kullanımı
+
+Markdown içinde doğrudan JSX bileşenlerini kullanabilirsiniz:
+
+```jsx
+# Hoş Geldiniz
+
+Bu bir MDX sayfasıdır.
+
+<Button onClick={() => alert('Tıklandı!')}>
+  Bana Tıkla
+</Button>
+```
+
+### 2.3. Markdown ve JSX Karışımı
+
+MDX, Markdown ve JSX'i aynı dosyada sorunsuz bir şekilde karıştırmanıza olanak tanır:
+
+```jsx
+# Ürün Listesi
+
+Aşağıda en popüler ürünlerimizin bir listesi bulunmaktadır:
+
+<ProductList>
+  <Product name="Laptop" price={1999} />
+  <Product name="Akıllı Telefon" price={999} />
+  <Product name="Tablet" price={599} />
+</ProductList>
+
+Daha fazla ürün için [katalogumuz](https://www.ornek.com/katalog)a göz atın.
+```
+
+## 3. MDX'e Özgü Özellikler
+
+### 3.1. Exported Değişkenler
+
+MDX dosyalarında, dosya düzeyinde değişkenler tanımlayıp dışa aktarabilirsiniz:
+
+```jsx
+export const author = 'Ayşe Yılmaz'
+export const date = '2024-03-15'
+
+# {author} tarafından yazıldı
+
+Bu yazı {date} tarihinde yayınlandı.
+```
+
+### 3.2. Kod Çalıştırma
+
+MDX, JavaScript ifadelerini çalıştırmanıza olanak tanır:
+
+```jsx
+{(() => {
+  const name = 'Dünya'
+  return <h1>Merhaba, {name}!</h1>
+})()}
+```
+
+### 3.3. Layout Bileşenleri
+
+MDX dosyanızı özel bir layout ile sarmak için:
+
+```jsx
+import Layout from './components/Layout'
+
+export default ({ children }) => <Layout>{children}</Layout>
+
+# İçerik Başlığı
+
+Bu içerik, yukarıda tanımlanan Layout bileşeni içinde render edilecektir.
+```
+
+## 4. İleri Düzey MDX Kullanımı
+
+### 4.1. MDX Providera
+
+Tüm MDX dosyalarınız için global bileşenler veya stilleri tanımlamak için MDXProvider kullanabilirsiniz:
+
+```jsx
+import { MDXProvider } from '@mdx-js/react'
+import { Button, Box } from './components'
+
+const components = {
+  Button,
+  Box
+}
+
+<MDXProvider components={components}>
+  {/* MDX içeriğiniz burada */}
+</MDXProvider>
+```
+
+### 4.2. Dinamik İçerik Oluşturma
+
+MDX, dinamik içerik oluşturmak için JavaScript'in tüm gücünü kullanmanıza olanak tanır:
+
+```jsx
+export const numbers = Array.from({ length: 5 }, (_, i) => i + 1)
+
+# Sayı Listesi
+
+{numbers.map(num => (
+  <Box key={num}>
+    Sayı: {num}
+  </Box>
+))}
+```
+
+## 5. MDX Dosyalarını Derleme ve Kullanma
+
+MDX dosyalarını kullanmak için genellikle bir derleme adımı gerekir. Bu, projenizin yapılandırmasına bağlı olarak değişebilir. Örneğin, Next.js veya Gatsby gibi çerçeveler MDX desteğini entegre eder.
+
+### 5.1. Next.js ile MDX Kullanımı
+
+```jsx
+// next.config.js
+const withMDX = require('@next/mdx')()
+
+module.exports = withMDX({
+  pageExtensions: ['js', 'jsx', 'mdx'],
+})
+```
+
+### 5.2. Gatsby ile MDX Kullanımı
+
+```jsx
+// gatsby-config.js
+module.exports = {
+  plugins: ['gatsby-plugin-mdx'],
+}
+```
+
+Bu rehber, MDX dosya formatının temellerini ve sözdizimini kapsamlı bir şekilde ele almaktadır. MDX, içerik oluşturma ve web geliştirme arasındaki boşluğu doldurarak, yazarların zengin ve interaktif içerikler oluşturmasına olanak tanır.
